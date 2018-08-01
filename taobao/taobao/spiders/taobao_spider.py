@@ -24,9 +24,8 @@ class TaobaoSpiderSpider(Spider):
 
     def first_parse(self, response):
         self.logger.debug(response)
-        print('1111')
         #print(response.text)
-        print('222')
+        print('解析商品基本数据')
         #data = re.search(r"g_page_config = (.*?)}};", response.text).group(1)+r'}}'
         # 解析商品索引页的信息
         try:
@@ -90,14 +89,13 @@ class TaobaoSpiderSpider(Spider):
             yield item
         d_price_url = 'https:'+re.search(r'g_config.*?sibUrl.*?\'(.*?)\',',response_text,re.S).group(1) +'&callback=onSibRequestSuccess'
         goods_d_id = item['goods_d_id']
-        yield Request(url=d_price_url,callback=self.get_api_price,meta={'goods_d_id':goods_d_id,'goods_id':goods_id})
+        yield Request(url=d_price_url,callback=self.get_api_price,meta={'goods_id':goods_id})
         
 
     def get_api_price(self,response):
-        print('解析详细价格')
+        print('解析商品详细价格')
         #print(response.request.headers)
         goods_id = response.meta.get('goods_id')
-        goods_d_id = response.meta.get('goods_d_id')
         try:
             body=json.loads(re.search(r'onSibRequestSuccess\((.*?)\);',response.text,re.S).group(1))
         except Exception as e:
@@ -113,6 +111,7 @@ class TaobaoSpiderSpider(Spider):
         #os._exit(0)
         for i in quantity_dict:
             item = TaobaoDetailItem()
+            item['goods_d_id'] = i 
             item['goods_id'] = goods_id
             try:
                 item['goods_d_quantity']=quantity_dict[i]['sellableQuantity']
@@ -129,6 +128,7 @@ class TaobaoSpiderSpider(Spider):
             except Exception as e:
                 print('该商品无促销价格',e)
                 print(pro_price_dict[i][0])
+            #print(item)
             yield item
 
 

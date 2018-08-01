@@ -28,7 +28,7 @@ class MongoPipeline(object):
         self.client = pymongo.MongoClient(self.mongo_uri)
         self.db = self.client[self.mongo_db]
         self.db[TaobaoItem.collection].create_index([('goods_id', pymongo.ASCENDING)])
-        self.db[TaobaoDetailItem.collection].create_index([('goods_d_skuid', pymongo.ASCENDING)])
+        self.db[TaobaoDetailItem.collection].create_index([('goods_d_id', pymongo.ASCENDING)])
 
     def close_spider(self, spider):
         self.client.close()
