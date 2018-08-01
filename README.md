@@ -7,5 +7,5 @@
 ## 待改善:
 1.cookies池未充足
 <br>2.由于淘宝登录需要手机验证码,未实现cookie池的自动生成与维护
-<br>3.仅添加proxy的中间件,完成了proxypool,但未实践使用
+<br>3.添加了proxymiddleware,未实践测试对爬取的影响
 <br>4.天猫的爬取逻辑与淘宝一致
