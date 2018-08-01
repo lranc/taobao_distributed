@@ -115,19 +115,22 @@ class TaobaoSpiderSpider(Spider):
             item['goods_id'] = goods_id
             try:
                 item['goods_d_quantity']=quantity_dict[i]['sellableQuantity']
-            except Exception as e:
+            except KeyError as e:
+                item['goods_d_quantity'] = 'null'
                 print('该商品型号无库存数据',e)
-                print(quantity_dict[i])
+                
             try:
                 item['goods_d_pre_price'] = origin_price_dict[i]['price']
-            except Exception as e:
+            except KeyError as e:
+                item['goods_d_pre_price'] = 'null'
                 print('该商品无原价格信息',e)
-                print(origin_price_dict[i])
+                
             try:
                 item['goods_d_now_price'] = pro_price_dict[i][0]['price']
-            except Exception as e:
+            except KeyError as e:
+                item['goods_d_now_price'] = 'null'
                 print('该商品无促销价格',e)
-                print(pro_price_dict[i][0])
+                
             #print(item)
             yield item
 
